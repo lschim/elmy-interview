@@ -13,6 +13,9 @@ My idea was to put in a place a retry process, where the number of retries is re
 I settled a test environment using mocha, but I missed time to implement relevent tests
 
 # How to run the application
+
 Checkout the git repository
+
 Run 'npm install'
-Run 'npm start <fromDate> <toDate> <outputFormat>'
+
+Run 'npm start *fromDate* *toDate* *outputFormat*
