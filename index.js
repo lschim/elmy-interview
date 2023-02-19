@@ -1,7 +1,7 @@
 const logger = require('./src/utilities/logger')
 const outputManager = require('./src/output-manager')
 const ProductionRequester = require('./src/production-requester')
-logger.info('Starting application with parameters ')
+logger.info('Starting application with parameters '+process.argv)
 
 
 
@@ -30,7 +30,7 @@ if(!outputManager.isValidFormat(outputFormat))
 // send requests to power supplies
 const productionRequester = new ProductionRequester()
 productionRequester.queryProductionAPIs(fromDate, toDate).then( (res) => {
-    console.log(res)
+ console.log(res)
 })
 
 //TODO aggregate data
