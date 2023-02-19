@@ -12,6 +12,8 @@ My idea was to put in a place a retry process, where the number of retries is re
 
 I settled a test environment using mocha, but I missed time to implement relevent tests
 
+I used as few external modules as possible, I only have a dependency on mocha for the tests, and on pinto for the logging process
+
 # How to run the application
 
 Checkout the git repository
