@@ -1,0 +1,5 @@
+{
+    "logLevel": "info",
+    "logDestination": "./logs/log.json",
+    "maxNumberOfRetries": 5
+}
