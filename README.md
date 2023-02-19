@@ -18,4 +18,4 @@ Checkout the git repository
 
 Run 'npm install'
 
-Run 'npm start *fromDate* *toDate* *outputFormat*
+Run 'npm start *fromDate* *toDate* *outputFormat*'
