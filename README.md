@@ -19,3 +19,8 @@ Checkout the git repository
 Run 'npm install'
 
 Run 'npm start *fromDate* *toDate* *outputFormat*'
+
+
+# Troubleshooting
+
+Make sure the folder for logs provided in the configuration file (conf/default-conf.json) exists in the system. By default, the logs are written where the project was cloned.
