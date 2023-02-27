@@ -1,5 +1,5 @@
-const https = require('https')
-const logger = require('../logger')
+import https from 'https'
+import logger from '../logger.js'
 
 class ServerError extends Error
 {
@@ -15,17 +15,17 @@ class ServerError extends Error
     @param maxNumberOfRetries the max number of retries when the server returns error 500 before stopping to send requests
     and rejecting the Promise 
 */
-async function queryProductionAPI(url, maxNumberOfRetries) {
+export async function queryProductionAPI(url, maxNumberOfRetries) {
 
 
     //TODO handles error 500 and retry
     return new Promise((resolve) => {
         let data = ''
-    
+        let numberOfRetries = 0
         https.get(url, res => {
         if(res.statusCode == 500) {
             logger.info('Error 500 when querying url '+url+ '.'+ (maxNumberOfRetries-numberOfRetries) +' tries left')
-            return new Promise.reject('Error 500 when querying'+url)
+            return Promise.reject('Error 500 when querying'+url)
         }
         res.on('data', chunk => { data += chunk }) 
 
@@ -35,6 +35,3 @@ async function queryProductionAPI(url, maxNumberOfRetries) {
         })
     })
 }
-
-
-module.exports = {queryProductionAPI};

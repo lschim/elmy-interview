@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Application to retrieve and aggregate production data from power supplies",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node index.js",
     "test": "mocha"

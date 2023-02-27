@@ -1,7 +1,7 @@
-const conf = require('./utilities/conf')
-const queryManager = require('./utilities/network/query-manager')
-const { URL } = require('url');
-const logger = require('./utilities/logger')
+import conf from './utilities/conf.cjs'
+import {queryProductionAPI} from './utilities/network/query-manager.js'
+import { URL } from 'url'
+import logger from './utilities/logger.js'
 
 /**
  * Function that expects an array of elements in the form of { 'start' : xxx, 'end' : yyy, 'power' : zzz}.
@@ -31,7 +31,7 @@ function fillGapsOfTime(arrayOfElements) {
 /**
  * Class that sends requests to all power production APIs to retrieve their production info and aggregates it
  */
-class ProductionRequester
+export default class ProductionRequester
 {
     constructor()
     {
@@ -58,7 +58,7 @@ class ProductionRequester
         const hawesURL = new URL('https://interview.beta.bcmenergy.fr/hawes')
         hawesURL.searchParams.append('from', fromDate)
         hawesURL.searchParams.append('to', toDate)
-        return queryManager.queryProductionAPI(hawesURL, this.maxNumberOfTries).then((res) =>
+        return queryProductionAPI(hawesURL, this.maxNumberOfTries).then((res) =>
         {
             const obj = JSON.parse(res)
             const ret = fillGapsOfTime(obj)
@@ -77,7 +77,7 @@ class ProductionRequester
         const url = new URL('https://interview.beta.bcmenergy.fr/barnsley')
         url.searchParams.append('from', fromDate)
         url.searchParams.append('to', toDate)
-        return queryManager.queryProductionAPI(url, this.maxNumberOfTries)
+        return queryProductionAPI(url, this.maxNumberOfTries)
     }
 
     /**
@@ -91,8 +91,7 @@ class ProductionRequester
         const url = new URL('https://interview.beta.bcmenergy.fr/hounslow')
         url.searchParams.append('from', fromDate)
         url.searchParams.append('to', toDate)
-        return queryManager.queryProductionAPI(url, this.maxNumberOfTries)
+        return queryProductionAPI(url, this.maxNumberOfTries)
     }
 }
 
-module.exports = ProductionRequester

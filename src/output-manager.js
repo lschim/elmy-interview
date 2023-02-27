@@ -8,7 +8,7 @@ const format = {
 /**
  * Function that return the list of available output formats of the application
  */
-function listAvailableFormatsAsText() 
+export function listAvailableFormatsAsText() 
 {
     return Object.values(format);
 }
@@ -17,9 +17,7 @@ function listAvailableFormatsAsText()
  * Function that checks if the format provided in parameter is a valid output format
  * @param {String} providedFormat 
  */
-function isValidFormat(providedFormat) 
+export function isValidFormat(providedFormat) 
 {
     return Object.values(format).includes(providedFormat)
 }
-
-module.exports = {listAvailableFormatsAsText, isValidFormat};

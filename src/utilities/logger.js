@@ -1,7 +1,4 @@
-const pino = require('pino')
-const conf = require('./conf')
+import pino from 'pino'
+import conf from './conf.cjs'
 
-const logger = pino({level: conf.logLevel}, pino.destination(conf.logDestination))
-
-// Log configuration for the project
-module.exports = logger
+export default pino({level: conf.logLevel}, pino.destination(conf.logDestination))
