@@ -1,13 +1,13 @@
 
 /* The output available formats for the application */
-const format = ['json', 'csv']
+const formats = ['json', 'csv']
 
 /**
- * Function that return the list of available output formats of the application
+ * Function that returns the list of available output formats of the application
  */
 export function getAvailableOutputFormats() 
 {
-    return format;
+    return formats;
 }
 
 /**
@@ -16,5 +16,5 @@ export function getAvailableOutputFormats()
  */
 export function isValidFormat(providedFormat) 
 {
-    return format.includes(providedFormat)
+    return formats.includes(providedFormat)
 }
