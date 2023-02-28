@@ -22,6 +22,7 @@ Run 'npm install'
 
 Run 'npm start *fromDate* *toDate* *outputFormat*'
 
+To run the tests, use 'npm test'
 
 # Troubleshooting
 
