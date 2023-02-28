@@ -6,6 +6,7 @@ import { getAvailableOutputFormats, isValidFormat as isValidOutputFormat } from 
  * two parameters of the CLI which are the node bin and main js file.
  * @param {*} args 
  * @throws if parameters are missing, or if the values are invalid
+ * @returns object containing from, to and output properties
  */
 export function parseRawInputFromCLI()
 {
