@@ -9,8 +9,9 @@ const validatedParams = parseRawInputFromCLI()
 
 // send requests to power supplies
 const productionRequester = new ProductionRequester()
-productionRequester.queryProductionAPIs(validatedParams.from, validatedParams.to)
+const productionMap = productionRequester.queryProductionAPIs(validatedParams.from, validatedParams.to)
 
 //TODO Output in the requested format
+console.log(await productionMap)
 
 

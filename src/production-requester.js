@@ -63,7 +63,7 @@ export default class ProductionRequester
     }
 
     /**
-     * Function that sends queries to all power production APIs and aggregate the data
+     * Function that sends queries to all power production APIs and aggregate the output in a production map that is returned
      * @param {String} fromDate 
      * @param {String} toDate 
      */
@@ -74,7 +74,6 @@ export default class ProductionRequester
             queries.push(this.buildProductionMapForAPI(apiConf, fromDate, toDate))
         }
         const productionMaps = await Promise.all(queries)
-        console.log(productionMaps)
         return aggregateSummingValues(productionMaps)
     }
 
