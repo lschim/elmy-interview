@@ -2,6 +2,7 @@ import conf from './utilities/conf.cjs'
 import {queryProductionAPI} from './utilities/network/query-manager.js'
 import { URL } from 'url'
 import logger from './utilities/logger.js'
+import {generateProductionMap, aggregateSummingValues} from './production-map.js'
 
 const productionApis = [
     {url: 'https://interview.beta.bcmenergy.fr/hawes', fromParameterName: 'from', outputType: 'json',
@@ -15,31 +16,6 @@ const productionApis = [
 ]
 
 /**
- * Function that expects an array of elements in the form of { 'start' : xxx, 'end' : yyy, 'power' : zzz}.
- * This function makes sure that there is no gap between the end of an element and the start of the next element
- * If there is a gap at rank N, this function will make the mean of the value between the rank N-1 and N+1 and add this element in the returning array 
- * @param {array} arrayOfElements 
- * @returns array without gap. 
- */
-function fillGapsOfTime(arrayOfElements) {
-    const res = []
-    let previousEnd = 0
-    let previousValue = 0
-    arrayOfElements.forEach((elem =>{
-        if(previousEnd && elem['start'] != previousEnd)
-        {
-            //There is a gap here, create element
-            logger.info('Gap found at time '+elem['start'])
-            res.append({'start': previousEnd, 'end': elem['start'], 'power': (previousValue+elem['power'])/2})
-        }
-        res.push(elem)
-        previousEnd = elem['end']
-        previousValue = elem['power']
-    }))
-    return res
-}
-
-/**
  * Class that sends requests to all power production APIs to retrieve their production info and aggregates it
  */
 export default class ProductionRequester
@@ -47,6 +23,7 @@ export default class ProductionRequester
     constructor()
     {
         this.maxNumberOfTries = conf.maxNumberOfRetries
+        this.stepOfTime = conf.stepOfTime
     }
 
     /**
@@ -63,21 +40,17 @@ export default class ProductionRequester
         urlObj.searchParams.append(apiConf.fromParameterName, from)
         urlObj.searchParams.append(apiConf.toParameterName, to)
         const apiRes =  await queryProductionAPI(urlObj, this.maxNumberOfTries)
-        
-        this.generateProductionMap(this.parseData(apiRes, apiConf.outputType))
-        return apiRes
-        
+        return generateProductionMap(this.parseData(apiRes, apiConf.outputType), apiConf.startKey, apiConf.endKey, apiConf.powerKey, this.stepOfTime)
     }
+
+
 
     /**
-     * TODO
+     * Function that parses the raw content returned by the API and turns it into an array of objects depending on the output 
+     * type of the API
+     * @param {*} data 
+     * @param {*} apiType 
      */
-    generateProductionMap(data, apiConf) {
-        const res = '';
-        return res;
-    }
-
-
     parseData(data, apiType) {
          
         switch(apiType) {
@@ -94,13 +67,15 @@ export default class ProductionRequester
      * @param {String} fromDate 
      * @param {String} toDate 
      */
-    queryProductionAPIs(fromDate, toDate)
+    async queryProductionAPIs(fromDate, toDate)
     {
         let queries = []
         for(const apiConf of productionApis){
             queries.push(this.buildProductionMapForAPI(apiConf, fromDate, toDate))
         }
-        return Promise.all(queries)
+        const productionMaps = await Promise.all(queries)
+        console.log(productionMaps)
+        return aggregateSummingValues(productionMaps)
     }
 
 }

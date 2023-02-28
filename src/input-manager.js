@@ -10,9 +10,9 @@ import { getAvailableOutputFormats, isValidFormat as isValidOutputFormat } from 
  */
 export function parseRawInputFromCLI()
 {
-    const from = process.argv[2] || ( () => { throw 'Missing from parameter' })()
-    const to = process.argv[3]  || ( () => { throw 'Missing to parameter' })()
-    const output = process.argv[4]  || ( () => { throw 'Missing output format parameter' })()
+    const from = process.argv[2] || ( () => { console.log(getInputDoc()); throw 'Missing from parameter' })()
+    const to = process.argv[3]  || ( () => { console.log(getInputDoc()); throw 'Missing to parameter' })()
+    const output = process.argv[4]  || ( () => { console.log(getInputDoc()); throw 'Missing output format parameter' })()
     
     if(! isValid(from, to, output)){
         console.log(getInputDoc())
