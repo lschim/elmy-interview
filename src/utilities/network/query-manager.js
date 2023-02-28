@@ -1,12 +1,29 @@
 import https from 'https'
 import logger from '../logger.js'
 
-class ServerError extends Error
-{
-    constructor()
-    {
-        super()
-    }
+
+
+/**
+ * Low level function that sends the request to the url in parameter using https library
+ * Returns a promise that resolves when all data is read from server
+ * @param {url} url 
+ */
+async function request(url) {
+    let data = ''
+    //TODO use streams to clarify the code
+    return new Promise((resolve, reject) => {
+        https.get(url, res => {
+            if(res.statusCode == 500) {
+                logger.info(`Error 500 when querying url ${url}`)
+                return reject(`Error 500 when querying url ${url}`)
+            }
+            res.on('data', chunk => { 
+                data += chunk })
+                .on('end', () => {
+                    resolve(data)
+                }) 
+        })
+    })
 }
 
 /**
@@ -16,22 +33,11 @@ class ServerError extends Error
     and rejecting the Promise 
 */
 export async function queryProductionAPI(url, maxNumberOfRetries) {
-
-
-    //TODO handles error 500 and retry
-    return new Promise((resolve) => {
-        let data = ''
-        let numberOfRetries = 0
-        https.get(url, res => {
-        if(res.statusCode == 500) {
-            logger.info('Error 500 when querying url '+url+ '.'+ (maxNumberOfRetries-numberOfRetries) +' tries left')
-            return Promise.reject('Error 500 when querying'+url)
-        }
-        res.on('data', chunk => { data += chunk }) 
-
-        res.on('end', () => {
-            resolve(data)
-            })
-        })
-    })
-}
+    for (let i = 0; i <= maxNumberOfRetries; i++) {
+      try {
+        return await request(url);
+      } catch (err) {
+        console.log(`Retrying for ${url}. Attempt ${i}`);
+      }
+    }
+  }
