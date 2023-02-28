@@ -15,7 +15,8 @@
   "author": "Louis Schimchowitsch",
   "license": "ISC",
   "devDependencies": {
-    "mocha": "^10.2.0"
+    "mocha": "^10.2.0",
+    "chai": "^4.3.7"
   },
   "dependencies": {
     "pino": "^8.10.0"
